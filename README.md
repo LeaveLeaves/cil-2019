@@ -19,7 +19,7 @@ Code in develop branch should pass the submission requirements.
 
 ## Submit paper
 
-1. Submit the ![final report](https://cmt3.research.microsoft.com/ETHZCIL2019) here.
+1. Submit the [final report](https://cmt3.research.microsoft.com/ETHZCIL2019) here.
 2. Signed form here: http://da.inf.ethz.ch/teaching/2019/CIL/material/Declaration-Originality.pdf
 3. Kaggle sign in: https://www.kaggle.com/t/3e9d21e9198d44b6994d7ffe5b838f96
 
