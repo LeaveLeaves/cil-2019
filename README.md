@@ -17,6 +17,20 @@ Code should be reviewed before merging into `develop` branch.
 
 Code in develop branch should pass the submission requirements.
 
+## Submit paper
+
+1. Submit the ![final report](https://cmt3.research.microsoft.com/ETHZCIL2019) here.
+2. Signed form here: http://da.inf.ethz.ch/teaching/2019/CIL/material/Declaration-Originality.pdf
+3. Kaggle sign in: https://www.kaggle.com/t/3e9d21e9198d44b6994d7ffe5b838f96
+
+### Project Grading
+
+The project grade is composed of a competitive (30%) and a non-competitive (70%) part.
+
+Competitive grade (30%): The ranks in the Kaggle competition system will be converted on a linear scale to a grade between 4 and 6.
+
+Non-competitive grade: The following criteria are graded based on an evaluation by the teaching assistants: quality of paper (30%), creativity of solution (20%), quality of implementation (20%). Each project is graded by two independent reviewers. The grades of each reviewer are de-biased such that the aveage grade across all projects that the reviewer graded is comparable for each reviewer.
+
 ## Data
 
 1. `train_pos.txt` and `train_neg.txt`:
