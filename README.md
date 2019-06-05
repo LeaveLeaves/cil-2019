@@ -19,6 +19,17 @@ Code in develop branch should pass the submission requirements.
 
 ## Logistics
 
+### Links:
+
+1. [Projects description](http://da.inf.ethz.ch/teaching/2019/CIL/project.php)
+2. [Road seg](https://inclass.kaggle.com/c/cil-road-segmentation-2019)
+3. [Road seg kaggle sign in](https://www.kaggle.com/t/c83d1c6de17c433ca64b3a9174205c44)
+4. [Link for dataset.zip](https://storage.googleapis.com/public-wyq/cil-2019/cil-road-segmentation-2019.zip)
+
+```bash
+wget https://storage.googleapis.com/public-wyq/cil-2019/cil-road-segmentation-2019.zip
+```
+
 ### Computational resources
 
 1. https://scicomp.ethz.ch/wiki/Leonhard
@@ -29,4 +40,4 @@ Code in develop branch should pass the submission requirements.
 
 1. Submit the final report: https://cmt3.research.microsoft.com/ETHZCIL2019
 2. Signed form here: http://da.inf.ethz.ch/teaching/2019/CIL/material/Declaration-Originality.pdf
-3. Kaggle sign in: https://www.kaggle.com/t/3e9d21e9198d44b6994d7ffe5b838f96
+3. Kaggle: https://inclass.kaggle.com/c/cil-road-segmentation-2019
