@@ -35,7 +35,7 @@ C.val_log_file = C.log_dir + '/val_' + exp_time + '.log'
 C.link_val_log_file = C.log_dir + '/val_last.log'
 
 """Data Dir and Weight Dir"""
-C.dataset_path = "/data/cil-2019/cil-road-segmentation-2019/"
+C.dataset_path = "/home/cil-2019/cil-road-segmentation-2019/"
 C.img_root_folder = C.dataset_path
 C.gt_root_folder = C.dataset_path
 C.train_source = osp.join(C.dataset_path, "train.txt")
