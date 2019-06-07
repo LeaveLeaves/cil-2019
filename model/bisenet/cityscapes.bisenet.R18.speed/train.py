@@ -13,7 +13,7 @@ import torch.backends.cudnn as cudnn
 from config import config
 from dataloader import get_train_loader
 from network import BiSeNet
-from datasets import Cityscape, Cil
+from datasets import Cityscapes, Cil
 
 from utils.init_func import init_weight, group_weight
 from utils.pyt_utils import all_reduce_tensor
