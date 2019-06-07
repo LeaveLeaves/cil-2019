@@ -13,8 +13,8 @@ from torch.nn.modules.batchnorm import BatchNorm2d
 
 from config import config
 from dataloader import get_train_loader
-from network import BiSeNet
-from datasets import Cityscapes
+from network import Network_v1
+from datasets import Cil
 
 from utils.init_func import init_weight, group_weight
 from utils.pyt_utils import all_reduce_tensor
@@ -38,7 +38,7 @@ with Engine(custom_parser=parser) as engine:
         torch.cuda.manual_seed(seed)
 
     # data loader
-    train_loader, train_sampler = get_train_loader(engine, Cityscapes)
+    train_loader, train_sampler = get_train_loader(engine, Cil)
 
     # config network and criterion
     criterion = nn.CrossEntropyLoss(reduction='mean',
@@ -53,12 +53,10 @@ with Engine(custom_parser=parser) as engine:
     if engine.distributed:
         BatchNorm2d = SyncBatchNorm
 
-    model = BiSeNet(config.num_classes, is_training=True,
-                    criterion=criterion,
-                    ohem_criterion=ohem_criterion,
+    model = Network_v1(out_planes=config.num_classes, is_training=True,
                     pretrained_model=config.pretrained_model,
-                    norm_layer=BatchNorm2d)
-    init_weight(model.business_layer, nn.init.kaiming_normal_,
+                    )
+    init_weight(model.layers, nn.init.kaiming_normal_,
                 BatchNorm2d, config.bn_eps, config.bn_momentum,
                 mode='fan_in', nonlinearity='relu')
 
@@ -68,19 +66,15 @@ with Engine(custom_parser=parser) as engine:
     #     base_lr = config.lr * engine.world_size
 
     params_list = []
-    params_list = group_weight(params_list, model.context_path,
+    params_list = group_weight(params_list, model.conv1,
                                BatchNorm2d, base_lr)
-    params_list = group_weight(params_list, model.spatial_path,
+    params_list = group_weight(params_list, model.conv2,
                                BatchNorm2d, base_lr * 10)
-    params_list = group_weight(params_list, model.global_context,
+    params_list = group_weight(params_list, model.conv3,
                                BatchNorm2d, base_lr * 10)
-    params_list = group_weight(params_list, model.arms,
+    params_list = group_weight(params_list, model.conv4,
                                BatchNorm2d, base_lr * 10)
-    params_list = group_weight(params_list, model.refines,
-                               BatchNorm2d, base_lr * 10)
-    params_list = group_weight(params_list, model.ffm,
-                               BatchNorm2d, base_lr * 10)
-    params_list = group_weight(params_list, model.heads,
+    params_list = group_weight(params_list, model.conv5,
                                BatchNorm2d, base_lr * 10)
 
     optimizer = torch.optim.SGD(params_list,
