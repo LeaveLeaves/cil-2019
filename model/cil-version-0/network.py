@@ -23,7 +23,7 @@ def get():
 
 class Network_v1(nn.Module):
 	def __init__(self, out_planes, is_training, pretrained_model=None):
-        super(Network_v1, self).__init__()
+        	super(Network_v1, self).__init__()
 		conv_channel = 128
 		
 		self.layers = []
