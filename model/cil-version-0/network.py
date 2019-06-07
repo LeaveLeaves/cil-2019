@@ -26,7 +26,7 @@ class Network_v1(nn.Module):
 		conv_channel = 128
 		self.layers = []
 		#conv7x7 with stride 1 padding 1, increase dept
-		self.conv1 = ConvBnRelu(1, conv_channel, 7, 1, 3, 
+		self.conv1 = ConvBnRelu(3, conv_channel, 7, 1, 3, 
 								has_bn=True, has_relu=True, has_bias=False, 
 								norm_layer=BN2D)
 
