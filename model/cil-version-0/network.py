@@ -26,7 +26,7 @@ class Network_v1(nn.Module):
         super(Network_v1, self).__init__()
 		conv_channel = 128
 		
-		self.layes = []
+		self.layers = []
 		#conv7x7 with stride 1 padding 1, increase depth
 		self.conv1 = ConvBnRelu(1, conv_channel, 7, 1, 3,
                        has_bn=True,
@@ -54,6 +54,8 @@ class Network_v1(nn.Module):
         )
 		self.loss = nn.criterion = nn.CrossEntropyLoss(reduction='mean',
                                     ignore_index=255)
+		
+		self.layers.append(self.conv1,self.conv2,self.conv3,self.conv4,self.conv5)
 		
 	def forward(self, x, gt):
 		x = self.conv1(x)
