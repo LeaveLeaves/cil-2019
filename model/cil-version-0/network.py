@@ -53,7 +53,11 @@ class Network_v1(nn.Module):
 		self.loss = nn.criterion = nn.CrossEntropyLoss(reduction='mean',
 									ignore_index=255)
 		
-		self.layers.append(self.conv1,self.conv2,self.conv3,self.conv4,self.conv5)
+		self.layers.append(self.conv1)
+		self.layers.append(self.conv2)
+		self.layers.append(self.conv3)
+		self.layers.append(self.conv4)
+		self.layers.append(self.conv5)
 		
 	def forward(self, x, gt):
 		x = self.conv1(x)
