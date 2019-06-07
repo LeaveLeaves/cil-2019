@@ -2,6 +2,19 @@
 
 ## __DO NOT COMMIT OR PUSH TO DEVELOP/MASTER__
 
+## Train command
+
+```shell
+# add sudo before each command
+docker ps -a 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+ae2f6abc24d5        ufoym/deepo         "bash"              2 hours ago         Up About an hour    6006/tcp            eager_ganguly
+docker ps -a -q
+ae2f6abc24d5
+## entering the bash
+docker exec -it ae2f6abc24d5 bash
+```
+
 ## Master branch
 
 `master` branch contains the final version
