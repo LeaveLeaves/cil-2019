@@ -13,11 +13,11 @@
 # add sudo before each command
 sudo bash
 docker ps -a 
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-ae2f6abc24d5        ufoym/deepo         "bash"              2 hours ago         Up About an hour    6006/tcp            eager_ganguly
+# CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+# ae2f6abc24d5        ufoym/deepo         "bash"              2 hours ago         Up About an hour    6006/tcp            eager_ganguly
 docker ps -a -q
-ae2f6abc24d5
-# entering the bash
+# ae2f6abc24d5
+# entering the bash with container ID
 docker exec -it ae2f6abc24d5 bash
 
 # exit docker container
