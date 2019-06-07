@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 import torch.distributed as dist
 import torch.backends.cudnn as cudnn
+from torch.nn.modules.batchnorm import BatchNorm2d
 # from torch.nn.parallel import DistributedDataParallel
 
 from config import config
@@ -21,11 +22,6 @@ from engine.lr_policy import PolyLR
 from engine.engine import Engine
 from seg_opr.loss_opr import SigmoidFocalLoss, ProbOhemCrossEntropy2d
 
-try:
-    from apex.parallel import DistributedDataParallel, SyncBatchNorm
-except ImportError:
-    raise ImportError(
-        "Please install apex from https://www.github.com/nvidia/apex .")
 
 parser = argparse.ArgumentParser()
 
