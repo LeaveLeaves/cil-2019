@@ -42,7 +42,7 @@ with Engine(custom_parser=parser) as engine:
 
     # config network and criterion
     #criterion = nn.CrossEntropyLoss(reduction='mean',
-                                    ignore_index=255)
+    #                                ignore_index=255)
     #min_kept = int(config.batch_size // len(
     #    engine.devices) * config.image_height * config.image_width // (
     #                       16 * config.gt_down_sampling ** 2))
