@@ -72,7 +72,7 @@ class SegEvaluator(Evaluator):
             count += 1
             rmse += d['rmse']
 
-        rmse_print = 'average RMSE for {} images: {}'.format(count, sum(rmse))
+        rmse_print = 'average RMSE for {} images: {}'.format(count, sum(rmse)/count)
 
         return rmse_print
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     all_dev = parse_devices(args.devices)
 
-    network = BiSeNet(config.num_classes, is_training=False,
+    network = Network_v1(config.num_classes, is_training=False,
                       criterion=None, ohem_criterion=None)
     data_setting = {'img_root': config.img_root_folder,
                     'gt_root': config.gt_root_folder,
