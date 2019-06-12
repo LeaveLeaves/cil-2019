@@ -41,17 +41,17 @@ with Engine(custom_parser=parser) as engine:
     train_loader, train_sampler = get_train_loader(engine, Cil)
 
     # config network and criterion
-    criterion = nn.CrossEntropyLoss(reduction='mean',
+    #criterion = nn.CrossEntropyLoss(reduction='mean',
                                     ignore_index=255)
-    min_kept = int(config.batch_size // len(
-        engine.devices) * config.image_height * config.image_width // (
-                           16 * config.gt_down_sampling ** 2))
-    ohem_criterion = ProbOhemCrossEntropy2d(ignore_label=255, thresh=0.7,
-                                            min_kept=min_kept,
-                                            use_weight=False)
+    #min_kept = int(config.batch_size // len(
+    #    engine.devices) * config.image_height * config.image_width // (
+    #                       16 * config.gt_down_sampling ** 2))
+    #ohem_criterion = ProbOhemCrossEntropy2d(ignore_label=255, thresh=0.7,
+      #                                      min_kept=min_kept,
+          #                                  use_weight=False)
 
-    if engine.distributed:
-        BatchNorm2d = SyncBatchNorm
+    #if engine.distributed:
+     #   BatchNorm2d = SyncBatchNorm
 
     model = Network_v1(out_planes=config.num_classes, is_training=True,
                     pretrained_model=config.pretrained_model,
