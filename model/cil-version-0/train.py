@@ -137,7 +137,7 @@ with Engine(custom_parser=parser) as engine:
             print_str = 'Epoch{}/{}'.format(epoch, config.nepochs) \
                         + ' Iter{}/{}:'.format(idx + 1, config.niters_per_epoch) \
                         + ' lr=%.2e' % lr \
-                        + ' loss=%.2f' % loss()
+                        + ' loss=%.2f' % loss
 
             pbar.set_description(print_str, refresh=False)
 
