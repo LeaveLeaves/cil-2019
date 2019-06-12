@@ -51,7 +51,7 @@ class Network_v1(nn.Module):
 								has_bn=True,
 								has_relu=True, has_bias=False, norm_layer=BN2D)
 
-		self.loss = nn.criterion = nn.CrossEntropyLoss(reduction='mean')
+		self.loss = nn.criterion = nn.CrossEntropyLoss(reduction='mean', ignore_index=220)
 									
 		
 		self.layers.append(self.conv1)
