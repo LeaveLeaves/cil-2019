@@ -24,7 +24,7 @@ class TrainPre(object):
     def __call__(self, img, gt):
         img, gt = random_mirror(img, gt)
 
-        gt = img_to_black(gt)
+#         gt = img_to_black(gt)
 
         if config.train_scale_array is not None:
             img, gt, scale = random_scale(img, gt, config.train_scale_array)
