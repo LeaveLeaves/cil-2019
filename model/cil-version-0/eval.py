@@ -15,7 +15,7 @@ from engine.evaluator import Evaluator
 from engine.logger import get_logger
 from seg_opr.metric import hist_info, compute_score
 from tools.benchmark import compute_speed, stat
-from datasets.cityscapes import Cil
+from datasets import Cil
 from network import Network_v1
 
 logger = get_logger()
