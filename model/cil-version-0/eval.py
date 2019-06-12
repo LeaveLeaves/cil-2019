@@ -15,8 +15,8 @@ from engine.evaluator import Evaluator
 from engine.logger import get_logger
 from seg_opr.metric import hist_info, compute_score
 from tools.benchmark import compute_speed, stat
-from datasets.cityscapes import Cityscapes
-from network import BiSeNet
+from datasets.cityscapes import Cil
+from network import Network_v1
 
 logger = get_logger()
 
@@ -101,7 +101,7 @@ if __name__ == "__main__":
                     'gt_root': config.gt_root_folder,
                     'train_source': config.train_source,
                     'eval_source': config.eval_source}
-    dataset = Cityscapes(data_setting, 'val', None)
+    dataset = Cil(data_setting, 'val', None)
 
     if args.speed_test:
         device = all_dev[0]
