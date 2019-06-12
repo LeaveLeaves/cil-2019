@@ -63,7 +63,7 @@ C.image_std = np.array([0.229, 0.224, 0.225])
 C.target_size = 1024
 C.image_height = 400
 C.image_width = 400
-C.gt_down_sampling = 1
+C.gt_down_sampling = 8
 C.num_train_imgs = 90
 C.num_eval_imgs = 10
 
