@@ -39,8 +39,8 @@ class SegEvaluator(Evaluator):
         #                   interpolation=cv2.INTER_NEAREST)
 
         pred = self.whole_eval(img,
-                               (config.image_height 
-                                config.image_width
+                               (config.image_height, 
+                                config.image_width),
                                device)
 
         # add pixel-wise RMSE
