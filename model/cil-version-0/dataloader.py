@@ -7,6 +7,12 @@ from config import config
 from utils.img_utils import random_scale, random_mirror, normalize, \
     generate_random_crop_pos, random_crop_pad_to_shape
 
+def img_to_black(img):
+    # change img to black
+    img = img.astype(np.float32) / 255.0
+    idx = img[:,:,0] > 220.0
+    img[idx,0] = 255.0
+    return img
 
 class TrainPre(object):
     def __init__(self, img_mean, img_std):
@@ -15,6 +21,9 @@ class TrainPre(object):
 
     def __call__(self, img, gt):
         img, gt = random_mirror(img, gt)
+
+        gt = img_to_black(gt)
+
         if config.train_scale_array is not None:
             img, gt, scale = random_scale(img, gt, config.train_scale_array)
 
