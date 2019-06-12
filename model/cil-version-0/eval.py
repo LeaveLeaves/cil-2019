@@ -31,16 +31,16 @@ class SegEvaluator(Evaluator):
         label = data['label']
         name = data['fn']
 
-        img = cv2.resize(img, (config.image_width, config.image_height),
-                         interpolation=cv2.INTER_LINEAR)
-        label = cv2.resize(label,
-                           (config.image_width // config.gt_down_sampling,
-                            config.image_height // config.gt_down_sampling),
-                           interpolation=cv2.INTER_NEAREST)
+        #img = cv2.resize(img, (config.image_width, config.image_height),
+        #                 interpolation=cv2.INTER_LINEAR)
+        #label = cv2.resize(label,
+        #                   (config.image_width // config.gt_down_sampling,
+        #                    config.image_height // config.gt_down_sampling),
+        #                   interpolation=cv2.INTER_NEAREST)
 
         pred = self.whole_eval(img,
-                               (config.image_height // config.gt_down_sampling,
-                                config.image_width // config.gt_down_sampling),
+                               (config.image_height 
+                                config.image_width
                                device)
 
         # add pixel-wise RMSE
