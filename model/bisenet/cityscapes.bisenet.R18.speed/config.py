@@ -83,7 +83,7 @@ C.weight_decay = 5e-4
 C.batch_size = 16 #4 * C.num_gpu
 C.nepochs = 80
 C.niters_per_epoch = 1000
-C.num_workers = 24
+C.num_workers = 1
 C.train_scale_array = [0.75, 1, 1.25, 1.5, 1.75, 2.0]
 
 """Eval Config"""
@@ -91,8 +91,8 @@ C.eval_iter = 30
 C.eval_stride_rate = 2 / 3
 C.eval_scale_array = [1, ]
 C.eval_flip = False
-C.eval_height = 768
-C.eval_width = 768 * 2
+C.eval_height = 400
+C.eval_width = 400
 
 """Display Config"""
 C.snapshot_iter = 50
