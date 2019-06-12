@@ -25,6 +25,7 @@ class Network_v1(nn.Module):
 		super(Network_v1, self).__init__()
 		conv_channel = 128
 		self.layers = []
+		self.is_training = is_training
 		#conv7x7 with stride 1 padding 1, increase dept
 		self.conv1 = ConvBnRelu(3, conv_channel, 7, 1, 3, 
 								has_bn=True, has_relu=True, has_bias=False, 
@@ -66,7 +67,7 @@ class Network_v1(nn.Module):
 		x = self.conv4(x)
 		x = self.conv5(x)
 
-		if is_training:
+		if self.is_training:
 			loss = self.loss(x,gt)
 			return loss
 			
