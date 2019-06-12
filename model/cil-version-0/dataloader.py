@@ -11,7 +11,9 @@ def img_to_black(img):
     # change img to black
     img = img.astype(np.float32) / 255.0
     idx = img[:,:] > 220.0
+    idx_0 = img[:,:] <= 220.0
     img[idx] = 255.0
+    img[idx_0] = 0.0
     return img
 
 class TrainPre(object):
