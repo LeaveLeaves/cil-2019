@@ -32,7 +32,7 @@ class Network_v1(nn.Module):
 								norm_layer=BN2D)
 
 		##conv7x7 with stride 1 padding 1, downsampling by 2
-		self.conv2 = ConvBnRelu(conv_channel, conv_channel, 7, 2, 3,
+		self.conv2 = ConvBnRelu(conv_channel, conv_channel, 7, 1, 3,
 								has_bn=True,has_relu=True, has_bias=False, 
 								norm_layer=BN2D)
 
@@ -42,17 +42,17 @@ class Network_v1(nn.Module):
 								norm_layer=BN2D)
 
 		#conv3x3 with stride 1 padding 1, downsampling by 2
-		self.conv4 = ConvBnRelu(conv_channel*2, conv_channel*2, 3, 2, 1,
+		self.conv4 = ConvBnRelu(conv_channel*2, conv_channel*2, 3, 1, 1,
 					   has_bn=True,
 					   has_relu=True, has_bias=False, norm_layer=BN2D)
 
 		#conv1x1 with stride 1 padding 1, reduce depth for classification
-		self.conv5 = ConvBnRelu(conv_channel*2, out_planes, 3, 2, 1,	
+		self.conv5 = ConvBnRelu(conv_channel*2, out_planes, 1, 1, 1,	
 								has_bn=True,
 								has_relu=True, has_bias=False, norm_layer=BN2D)
 
-		self.loss = nn.criterion = nn.CrossEntropyLoss(reduction='mean',
-									ignore_index=255)
+		self.loss = nn.criterion = nn.CrossEntropyLoss(reduction='mean')
+									
 		
 		self.layers.append(self.conv1)
 		self.layers.append(self.conv2)
