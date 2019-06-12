@@ -10,8 +10,8 @@ from utils.img_utils import random_scale, random_mirror, normalize, \
 def img_to_black(img):
     # change img to black
     img = img.astype(np.float32) / 255.0
-    idx = img[:,:,0] > 220.0
-    img[idx,0] = 255.0
+    idx = img[:,:] > 220.0
+    img[idx] = 255.0
     return img
 
 class TrainPre(object):
