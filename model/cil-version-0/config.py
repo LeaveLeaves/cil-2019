@@ -57,7 +57,7 @@ from utils.pyt_utils import model_urls
 
 """Image Config"""
 C.num_classes = 2
-C.background = 255
+C.background = -1
 C.image_mean = np.array([0.485, 0.456, 0.406])  # 0.485, 0.456, 0.406
 C.image_std = np.array([0.229, 0.224, 0.225])
 C.target_size = 1024
