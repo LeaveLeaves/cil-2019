@@ -47,7 +47,7 @@ class Network_v1(nn.Module):
 					   has_relu=True, has_bias=False, norm_layer=BN2D)
 
 		#conv1x1 with stride 1 padding 1, reduce depth for classification
-		self.conv5 = ConvBnRelu(conv_channel*2, out_planes, 1, 1, 1,	
+		self.conv5 = ConvBnRelu(conv_channel*2, out_planes, 1, 1, 0,	
 								has_bn=True,
 								has_relu=True, has_bias=False, norm_layer=BN2D)
 
