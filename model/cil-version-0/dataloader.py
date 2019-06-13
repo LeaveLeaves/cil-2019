@@ -56,7 +56,8 @@ def get_train_loader(engine, dataset):
     data_setting = {'img_root': config.img_root_folder,
                     'gt_root': config.gt_root_folder,
                     'train_source': config.train_source,
-                    'eval_source': config.eval_source}
+                    'eval_source': config.eval_source,
+                    'test_source': config.test_source}
     train_preprocess = TrainPre(config.image_mean, config.image_std)
 
     train_dataset = dataset(data_setting, "train", train_preprocess,

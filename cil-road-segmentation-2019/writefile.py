@@ -38,8 +38,9 @@ f.close()
 
 
 # test.txt
+print(len(test))
 with open('test.txt', 'w') as f:
     for i in range(len(test)):
-        line = test[i] + '\t' + gt[i] + '\n'
+        line = test[i] + '\t' + test[i] + '\n'
         f.write(line)
 f.close()

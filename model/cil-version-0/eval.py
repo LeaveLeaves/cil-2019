@@ -31,6 +31,7 @@ class SegEvaluator(Evaluator):
         label = data['label']
         name = data['fn']
 
+
         #img = cv2.resize(img, (config.image_width, config.image_height),
         #                 interpolation=cv2.INTER_LINEAR)
         #label = cv2.resize(label,
@@ -39,8 +40,8 @@ class SegEvaluator(Evaluator):
         #                   interpolation=cv2.INTER_NEAREST)
 
         pred = self.whole_eval(img,
-                               output_size=(config.image_height,config.image_width), 
-                               input_size=(config.image_height,config.image_width),
+                               output_size=(608, 608), 
+                               input_size=(608, 608),
                                device=device)
 
         #print(np.unique(pred))
@@ -48,9 +49,9 @@ class SegEvaluator(Evaluator):
 
         # add pixel-wise RMSE
         #print(np.unique(label))
-        rmse = sqrt(mean_squared_error(label, pred))
+        #rmse = sqrt(mean_squared_error(label, pred))
 
-        results_dict = {'rmse': rmse}
+        results_dict = {'rmse': 1}
 
         if self.save_path is not None:
             fn = name + '.png'
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     parser.add_argument('--show_image', '-s', default=False,
                         action='store_true')
     parser.add_argument('--save_path', '-p', default=None)
-    parser.add_argument('--input_size', type=str, default='1x3x400x400',
+    parser.add_argument('--input_size', type=str, default='1x3x608x608',
                         help='Input size. '
                              'channels x height x width (default: 1x3x224x224)')
     parser.add_argument('-speed', '--speed_test', action='store_true')
