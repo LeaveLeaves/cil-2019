@@ -47,11 +47,13 @@ class Network_v1(nn.Module):
 					   has_relu=True, has_bias=False, norm_layer=BN2D)
 
 		#conv1x1 with stride 1 padding 1, reduce depth for classification
-		self.conv5 = ConvBnRelu(conv_channel*2, out_planes, 1, 1, 0,	
-								has_bn=True,
-								has_relu=True, has_bias=False, norm_layer=BN2D)
+		self.conv5 = nn.Conv2d(conv_channel*2, out_planes, 1, 1, 0)	
+								#has_bn=True,
+								#has_relu=True, has_bias=False, norm_layer=BN2D)
 
-		self.loss = nn.criterion = nn.CrossEntropyLoss(reduction='mean', ignore_index=220)
+		#self.loss = nn.BCEWithLogitsLoss(reduction='mean')
+		self.loss = nn.CrossEntropyLoss(reduction='mean', ignore_index=255)
+		#self.loss = nn.BCELoss(reduction='mean')
 									
 		
 		self.layers.append(self.conv1)
@@ -60,13 +62,14 @@ class Network_v1(nn.Module):
 		self.layers.append(self.conv4)
 		self.layers.append(self.conv5)
 		
-	def forward(self, x, gt):
+	def forward(self, x, gt=None):
 		x = self.conv1(x)
 		x = self.conv2(x)
 		x = self.conv3(x)
 		x = self.conv4(x)
 		x = self.conv5(x)
-
+#		print("data type: ", x.type())
+#		print("image type: ", gt.type())
 		if self.is_training:
 			loss = self.loss(x,gt)
 			return loss

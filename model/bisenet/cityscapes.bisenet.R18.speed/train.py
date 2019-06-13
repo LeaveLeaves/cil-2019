@@ -4,10 +4,12 @@ import sys
 import argparse
 from tqdm import tqdm
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.distributed as dist
 import torch.backends.cudnn as cudnn
+from torch.nn import BatchNorm2d
 # from torch.nn.parallel import DistributedDataParallel
 
 from config import config
@@ -42,7 +44,7 @@ with Engine(custom_parser=parser) as engine:
         torch.cuda.manual_seed(seed)
 
     # data loader
-    train_loader, train_sampler = get_train_loader(engine, Cityscapes)
+    train_loader, train_sampler = get_train_loader(engine, Cil)
 
     # config network and criterion
     criterion = nn.CrossEntropyLoss(reduction='mean',
@@ -123,6 +125,7 @@ with Engine(custom_parser=parser) as engine:
             minibatch = dataloader.next()
             imgs = minibatch['data']
             gts = minibatch['label']
+            print(np.unique(gts))
 
             imgs = imgs.cuda(non_blocking=True)
             gts = gts.cuda(non_blocking=True)

@@ -1,3 +1,4 @@
+
 # encoding: utf-8
 
 from __future__ import absolute_import
@@ -57,7 +58,7 @@ from utils.pyt_utils import model_urls
 
 """Image Config"""
 C.num_classes = 2
-C.background = -1
+C.background = -100
 C.image_mean = np.array([0.485, 0.456, 0.406])  # 0.485, 0.456, 0.406
 C.image_std = np.array([0.229, 0.224, 0.225])
 C.target_size = 1024
@@ -80,7 +81,7 @@ C.lr = 1e-2
 C.lr_power = 0.9
 C.momentum = 0.9
 C.weight_decay = 5e-4
-C.batch_size = 16 #4 * C.num_gpu
+C.batch_size = 8 #4 * C.num_gpu
 C.nepochs = 80
 C.niters_per_epoch = 1000
 C.num_workers = 8

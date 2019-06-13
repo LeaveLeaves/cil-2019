@@ -23,6 +23,7 @@ class BaseDataset(data.Dataset):
         self._gt_path = setting['gt_root']
         self._train_source = setting['train_source']
         self._eval_source = setting['eval_source']
+        self._test_source = setting['test_source']
         self._file_names = self._get_file_names(split_name)
         self._file_length = file_length
         self.preprocess = preprocess
@@ -71,10 +72,12 @@ class BaseDataset(data.Dataset):
         return img, gt
 
     def _get_file_names(self, split_name):
-        assert split_name in ['train', 'val']
+        assert split_name in ['train', 'val', 'test']
         source = self._train_source
         if split_name == "val":
             source = self._eval_source
+        if split_name == "test":
+            source = self._test_source
 
         file_names = []
         with open(source) as f:

@@ -77,10 +77,11 @@ with Engine(custom_parser=parser) as engine:
     params_list = group_weight(params_list, model.conv5,
                                BatchNorm2d, base_lr * 10)
 
-    optimizer = torch.optim.SGD(params_list,
-                                lr=base_lr,
-                                momentum=config.momentum,
-                                weight_decay=config.weight_decay)
+    optimizer = torch.optim.Adam(params_list)
+    #SGD(params_list,
+     #                           lr=base_lr,
+      #                          momentum=config.momentum,
+       #                         weight_decay=config.weight_decay)
 
     # config lr policy
     total_iteration = config.nepochs * config.niters_per_epoch
@@ -116,6 +117,7 @@ with Engine(custom_parser=parser) as engine:
 
             imgs = imgs.cuda(non_blocking=True)
             gts = gts.cuda(non_blocking=True)
+            #gts = gts.float()
 
             loss = model(imgs, gts)
 

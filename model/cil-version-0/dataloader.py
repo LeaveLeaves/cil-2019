@@ -9,11 +9,11 @@ from utils.img_utils import random_scale, random_mirror, normalize, \
 
 def img_to_black(img):
     # change img to black
-    img = img.astype(np.float32) / 255.0
-    idx = img[:,:] > 220.0
-    idx_0 = img[:,:] <= 220.0
-    img[idx] = 255.0
-    img[idx_0] = 0.0
+    img = img.astype(np.int64)
+    idx = img[:,:] > 100
+    idx_0 = img[:,:] <= 100
+    img[idx] = 1
+    img[idx_0] = 0
     return img
 
 class TrainPre(object):
@@ -23,8 +23,12 @@ class TrainPre(object):
 
     def __call__(self, img, gt):
         img, gt = random_mirror(img, gt)
+        #print(np.unique(gt))
+        gt = img_to_black(gt)
+#        print(gt.dtype)
+#        np.savetxt('test.txt', gt) 
+        #print(np.unique(gt))
 
-#         gt = img_to_black(gt)
 
         if config.train_scale_array is not None:
             img, gt, scale = random_scale(img, gt, config.train_scale_array)
@@ -41,7 +45,8 @@ class TrainPre(object):
                           interpolation=cv2.INTER_NEAREST)
 
         p_img = p_img.transpose(2, 0, 1)
-
+        #p_gt = np.expand_dims(p_gt, axis=0)
+        #p_gt = p_gt.astype(np.float)
         extra_dict = None
 
         return p_img, p_gt, extra_dict

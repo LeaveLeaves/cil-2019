@@ -162,7 +162,9 @@ class Evaluator(object):
                               (output_size[1], output_size[0]),
                               interpolation=cv2.INTER_LINEAR)
 
-        pred = pred.argmax(2)
+        #print("Pred shape:", pred.shape)
+        #print(pred)
+        pred = pred.argmax(2) # change from 2 to 1
 
         return pred
 

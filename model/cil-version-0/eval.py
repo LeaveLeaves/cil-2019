@@ -39,19 +39,23 @@ class SegEvaluator(Evaluator):
         #                   interpolation=cv2.INTER_NEAREST)
 
         pred = self.whole_eval(img,
-                               (config.image_height, 
-                                config.image_width),
-                               device)
+                               output_size=(config.image_height,config.image_width), 
+                               input_size=(config.image_height,config.image_width),
+                               device=device)
+
+        #print(np.unique(pred))
+        #pred[pred == 1] = 237
 
         # add pixel-wise RMSE
+        #print(np.unique(label))
         rmse = sqrt(mean_squared_error(label, pred))
 
         results_dict = {'rmse': rmse}
 
-        # if self.save_path is not None:
-        #     fn = name + '.png'
-        #     cv2.imwrite(os.path.join(self.save_path, fn), pred)
-        #     logger.info('Save the image ' + fn)
+        if self.save_path is not None:
+            fn = name + '.png'
+            cv2.imwrite(os.path.join(self.save_path, fn), pred)
+            #logger.info('Save the image ' + fn)
 
         if self.show_image:
             colors = self.dataset.get_class_colors
@@ -71,8 +75,9 @@ class SegEvaluator(Evaluator):
         for d in results:
             count += 1
             rmse += d['rmse']
-
-        rmse_print = 'average RMSE for {} images: {}'.format(count, sum(rmse)/count)
+        rmse_print = '...'
+        #rmse_print = 'average RMSE for {} images: {}'.format(count, rmse/count)
+        #print(rmse/count)
 
         return rmse_print
 
@@ -85,7 +90,7 @@ if __name__ == "__main__":
     parser.add_argument('--show_image', '-s', default=False,
                         action='store_true')
     parser.add_argument('--save_path', '-p', default=None)
-    parser.add_argument('--input_size', type=str, default='1x3x512x1024',
+    parser.add_argument('--input_size', type=str, default='1x3x400x400',
                         help='Input size. '
                              'channels x height x width (default: 1x3x224x224)')
     parser.add_argument('-speed', '--speed_test', action='store_true')
@@ -95,13 +100,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
     all_dev = parse_devices(args.devices)
 
-    network = Network_v1(config.num_classes, is_training=False,
-                      criterion=None, ohem_criterion=None)
+    network = Network_v1(config.num_classes, is_training=False)
     data_setting = {'img_root': config.img_root_folder,
                     'gt_root': config.gt_root_folder,
                     'train_source': config.train_source,
-                    'eval_source': config.eval_source}
-    dataset = Cil(data_setting, 'val', None)
+                    'eval_source': config.eval_source,
+                    'test_source': config.test_source}
+    dataset = Cil(data_setting, 'test', None)
 
     if args.speed_test:
         device = all_dev[0]
