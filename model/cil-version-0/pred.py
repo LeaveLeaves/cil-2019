@@ -20,53 +20,28 @@ from network import Network_v1
 
 logger = get_logger()
 
-
-# add pixel-wise RMSE
-from sklearn.metrics import mean_squared_error
-from math import sqrt
-
 class SegEvaluator(Evaluator):
     def func_per_iteration(self, data, device):
         img = data['data']
         label = data['label']
         name = data['fn']
 
-        #img = cv2.resize(img, (config.image_width, config.image_height),
-        #                 interpolation=cv2.INTER_LINEAR)
-        #label = cv2.resize(label,
-        #                   (config.image_width // config.gt_down_sampling,
-        #                    config.image_height // config.gt_down_sampling),
-        #                   interpolation=cv2.INTER_NEAREST)
-
         pred = self.whole_eval(img,
-                               output_size=(config.image_height,config.image_width), 
-                               input_size=(config.image_height,config.image_width),
+                               output_size=(608, 608), 
+                               input_size=(608, 608),
                                device=device)
 
-        print(np.unique(pred))
-        pred[pred == 1] = 237
+        results_dict = {'rmse': 1}
 
         if self.save_path is not None:
             fn = name + '.png'
             cv2.imwrite(os.path.join(self.save_path, fn), pred)
-            logger.info('Save the image ' + fn)
-
-        if self.show_image:
-            colors = self.dataset.get_class_colors
-            image = img
-            clean = np.zeros(label.shape)
-            comp_img = show_img(colors, config.background, image, clean,
-                                label,
-                                pred)
-            cv2.imshow('comp_image', comp_img)
-            cv2.waitKey(0)
+            logger.info("Save the image " + fn)
 
         return results_dict
 
     def compute_metric(self, results):
-        rmse_print = 'Big ****'
-
-        return rmse_print
+        return 'no result'
 
 
 if __name__ == "__main__":
@@ -77,7 +52,7 @@ if __name__ == "__main__":
     parser.add_argument('--show_image', '-s', default=False,
                         action='store_true')
     parser.add_argument('--save_path', '-p', default=None)
-    parser.add_argument('--input_size', type=str, default='1x3x400x400',
+    parser.add_argument('--input_size', type=str, default='1x3x608x608',
                         help='Input size. '
                              'channels x height x width (default: 1x3x224x224)')
     parser.add_argument('-speed', '--speed_test', action='store_true')
@@ -91,8 +66,9 @@ if __name__ == "__main__":
     data_setting = {'img_root': config.img_root_folder,
                     'gt_root': config.gt_root_folder,
                     'train_source': config.train_source,
-                    'eval_source': config.eval_source}
-    dataset = Cil(data_setting, 'val', None)
+                    'eval_source': config.eval_source,
+                    'test_source': config.test_source}
+    dataset = Cil(data_setting, 'test', None)
 
     if args.speed_test:
         device = all_dev[0]
