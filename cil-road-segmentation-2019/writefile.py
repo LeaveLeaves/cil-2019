@@ -6,6 +6,7 @@ dataset_path = os.path.dirname(os.path.abspath(__file__))
 
 gt = []
 img = []
+test = []
 print(dataset_path)
 # get img
 for name in glob.glob('training/images/*'):
@@ -13,6 +14,9 @@ for name in glob.glob('training/images/*'):
 # get gt
 for name in glob.glob('training/groundtruth/*'):
     gt.append(name)
+# get test
+for name in glob.glob('test_images/*'):
+    test.append(name)
 
 img.sort()
 gt.sort()
@@ -32,3 +36,11 @@ with open('val.txt', 'w') as f:
         f.write(line)
 f.close()
 
+
+# test.txt
+print(len(test))
+with open('test.txt', 'w') as f:
+    for i in range(len(test)):
+        line = test[i] + '\t' + test[i] + '\n'
+        f.write(line)
+f.close()

@@ -2,6 +2,31 @@
 
 ## __DO NOT COMMIT OR PUSH TO DEVELOP/MASTER__
 
+## Train command
+
+1. login (after email confirmation) ![login](gcp-login.png)
+2. select compute engine ![gcp-gce](gcp-gce.png)
+3. ssh into terminal ![gce-ssh](gce-ssh.png)
+
+
+```shell
+# add sudo before each command
+sudo bash
+docker ps -a 
+# CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+# ae2f6abc24d5        ufoym/deepo         "bash"              2 hours ago         Up About an hour    6006/tcp            eager_ganguly
+docker ps -a -q
+# ae2f6abc24d5
+# entering the bash with container ID
+docker exec -it ae2f6abc24d5 bash
+
+# exit docker container
+exit
+
+# exit ssh
+exit
+```
+
 ## Master branch
 
 `master` branch contains the final version
