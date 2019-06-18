@@ -10,10 +10,8 @@ import time
 import argparse
 
 import torch
-import torch.distributed as dist
 
 from .logger import get_logger
-from .version import __version__
 from utils.pyt_utils import load_model, parse_devices, extant_file, link_file, \
     ensure_dir
 
@@ -37,13 +35,12 @@ class State(object):
 
 class Engine(object):
     def __init__(self, custom_parser=None):
-        self.version = __version__
+        self.version = '0.0.1'
         logger.info(
-            "PyTorch Version {}, Furnace Version {}".format(torch.__version__,
-                                                            self.version))
+            "PyTorch Version {}, Engine Version {}".format(torch.__version__,
+                                                          self.version))
         self.state = State()
         self.devices = None
-        self.distributed = False
 
         if custom_parser is None:
             self.parser = argparse.ArgumentParser()
@@ -56,17 +53,7 @@ class Engine(object):
 
         self.continue_state_object = self.args.continue_fpath
 
-        if 'WORLD_SIZE' in os.environ:
-            self.distributed = int(os.environ['WORLD_SIZE']) > 1
-
-        if self.distributed:
-            self.local_rank = self.args.local_rank
-            self.world_size = int(os.environ['WORLD_SIZE'])
-            torch.cuda.set_device(self.local_rank)
-            dist.init_process_group(backend="nccl", init_method='env://')
-            self.devices = [i for i in range(self.world_size)]
-        else:
-            self.devices = parse_devices(self.args.devices)
+        self.devices = parse_devices(self.args.devices)
 
     def inject_default_parser(self):
         p = self.parser
@@ -76,8 +63,6 @@ class Engine(object):
                        metavar="FILE",
                        dest="continue_fpath",
                        help='continue from one certain checkpoint')
-        p.add_argument('--local_rank', default=0, type=int,
-                       help='process rank on node')
 
     def register_state(self, **kwargs):
         self.state.register(**kwargs)
@@ -87,6 +72,7 @@ class Engine(object):
         self.state.iteration = iteration
 
     def save_checkpoint(self, path):
+        """Save model at a checkpoint."""
         logger.info("Saving checkpoint to file {}".format(path))
         t_start = time.time()
 
@@ -106,6 +92,7 @@ class Engine(object):
 
         t_iobegin = time.time()
         torch.save(state_dict, path)
+        # release model
         del state_dict
         del new_state_dict
         t_end = time.time()
@@ -115,6 +102,7 @@ class Engine(object):
                 path, t_iobegin - t_start, t_end - t_iobegin))
 
     def save_and_link_checkpoint(self, snapshot_dir, log_dir, log_dir_link):
+        """Save model and symlink under model directory."""
         ensure_dir(snapshot_dir)
         if not osp.exists(log_dir_link):
             link_file(log_dir, log_dir_link)
@@ -126,13 +114,9 @@ class Engine(object):
         link_file(current_epoch_checkpoint, last_epoch_checkpoint)
 
     def restore_checkpoint(self):
+        """Restore model from continue_state_object."""
         t_start = time.time()
-        if self.distributed:
-            tmp = torch.load(self.continue_state_object,
-                             map_location=lambda storage, loc: storage.cuda(
-                                 self.local_rank))
-        else:
-            tmp = torch.load(self.continue_state_object)
+        tmp = torch.load(self.continue_state_object)
         t_ioend = time.time()
 
         self.state.model = load_model(self.state.model, tmp['model'],
@@ -140,6 +124,7 @@ class Engine(object):
         self.state.optimizer.load_state_dict(tmp['optimizer'])
         self.state.epoch = tmp['epoch'] + 1
         self.state.iteration = tmp['iteration']
+        # release model
         del tmp
         t_end = time.time()
         logger.info(

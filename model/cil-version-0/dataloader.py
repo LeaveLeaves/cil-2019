@@ -17,18 +17,14 @@ def img_to_black(img):
     return img
 
 class TrainPre(object):
+    """Binary labels to the groundtruth, mirrored, cropped randomly"""
     def __init__(self, img_mean, img_std):
         self.img_mean = img_mean
         self.img_std = img_std
 
     def __call__(self, img, gt):
         img, gt = random_mirror(img, gt)
-        #print(np.unique(gt))
         gt = img_to_black(gt)
-#        print(gt.dtype)
-#        np.savetxt('test.txt', gt) 
-        #print(np.unique(gt))
-
 
         if config.train_scale_array is not None:
             img, gt, scale = random_scale(img, gt, config.train_scale_array)
@@ -66,12 +62,6 @@ def get_train_loader(engine, dataset):
     train_sampler = None
     is_shuffle = True
     batch_size = config.batch_size
-
-    if engine.distributed:
-        train_sampler = torch.utils.data.distributed.DistributedSampler(
-            train_dataset)
-        batch_size = config.batch_size // engine.world_size
-        is_shuffle = False
 
     train_loader = data.DataLoader(train_dataset,
                                    batch_size=batch_size,

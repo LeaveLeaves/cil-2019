@@ -10,7 +10,7 @@ import torch.multiprocessing as mp
 
 from config import config
 from utils.pyt_utils import ensure_dir, link_file, load_model, parse_devices
-from utils.visualize import print_iou, show_img
+# from utils.visualize import print_iou, show_img
 from engine.evaluator import Evaluator
 from engine.logger import get_logger
 from seg_opr.metric import hist_info, compute_score
@@ -31,12 +31,12 @@ class SegEvaluator(Evaluator):
         label = data['label']
         name = data['fn']
 
-        #img = cv2.resize(img, (config.image_width, config.image_height),
-        #                 interpolation=cv2.INTER_LINEAR)
-        #label = cv2.resize(label,
-        #                   (config.image_width // config.gt_down_sampling,
-        #                    config.image_height // config.gt_down_sampling),
-        #                   interpolation=cv2.INTER_NEAREST)
+#         img = cv2.resize(img, (config.image_width, config.image_height),
+#                         interpolation=cv2.INTER_LINEAR)
+#         label = cv2.resize(label,
+#                           (config.image_width // config.gt_down_sampling,
+#                            config.image_height // config.gt_down_sampling),
+#                           interpolation=cv2.INTER_NEAREST)
 
         pred = self.whole_eval(img,
                                output_size=(config.image_height,config.image_width),
@@ -47,17 +47,9 @@ class SegEvaluator(Evaluator):
             fn = name + '.png'
             cv2.imwrite(os.path.join(self.save_path, fn), pred)
             logger.info('Save the image ' + fn)
-
-        if self.show_image:
-            colors = self.dataset.get_class_colors
-            image = img
-            clean = np.zeros(label.shape)
-            comp_img = show_img(colors, config.background, image, clean,
-                                label,
-                                pred)
-            cv2.imshow('comp_image', comp_img)
-            cv2.waitKey(0)
-
+        
+        results_dict = {'rmse': 1}
+        
         return results_dict
 
     def compute_metric(self, results):
@@ -77,8 +69,6 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--epochs', default='last', type=str)
     parser.add_argument('-d', '--devices', default='1', type=str)
     parser.add_argument('-v', '--verbose', default=False, action='store_true')
-    parser.add_argument('--show_image', '-s', default=False,
-                        action='store_true')
     parser.add_argument('--save_path', '-p', default=None)
     parser.add_argument('--input_size', type=str, default='1x3x400x400',
                         help='Input size. '
@@ -94,7 +84,8 @@ if __name__ == "__main__":
     data_setting = {'img_root': config.img_root_folder,
                     'gt_root': config.gt_root_folder,
                     'train_source': config.train_source,
-                    'eval_source': config.eval_source}
+                    'eval_source': config.eval_source,
+                    'test_source': config.test_source}
     dataset = Cil(data_setting, 'val', None)
 
     if args.speed_test:
@@ -111,7 +102,6 @@ if __name__ == "__main__":
             segmentor = SegEvaluator(dataset, config.num_classes, config.image_mean,
                                      config.image_std, network,
                                      config.eval_scale_array, config.eval_flip,
-                                     all_dev, args.verbose, args.save_path,
-                                     args.show_image)
+                                     all_dev, args.verbose, args.save_path)
             segmentor.run(config.snapshot_dir, args.epochs, config.val_log_file,
                           config.link_val_log_file)

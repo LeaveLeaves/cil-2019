@@ -6,10 +6,8 @@ from tqdm import tqdm
 
 import torch
 import torch.nn as nn
-import torch.distributed as dist
 import torch.backends.cudnn as cudnn
 from torch.nn.modules.batchnorm import BatchNorm2d
-# from torch.nn.parallel import DistributedDataParallel
 
 from config import config
 from dataloader import get_train_loader
@@ -31,39 +29,24 @@ with Engine(custom_parser=parser) as engine:
     cudnn.benchmark = True
 
     seed = config.seed
-    if engine.distributed:
-        seed = engine.local_rank
+
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
 
     # data loader
     train_loader, train_sampler = get_train_loader(engine, Cil)
-
-    # config network and criterion
-    #criterion = nn.CrossEntropyLoss(reduction='mean',
-    #                                ignore_index=255)
-    #min_kept = int(config.batch_size // len(
-    #    engine.devices) * config.image_height * config.image_width // (
-    #                       16 * config.gt_down_sampling ** 2))
-    #ohem_criterion = ProbOhemCrossEntropy2d(ignore_label=255, thresh=0.7,
-      #                                      min_kept=min_kept,
-          #                                  use_weight=False)
-
-    #if engine.distributed:
-     #   BatchNorm2d = SyncBatchNorm
-
+    
+    # config network
     model = Network_v1(out_planes=config.num_classes, is_training=True,
-                    pretrained_model=config.pretrained_model,
-                    )
+                    pretrained_model=config.pretrained_model)
+    
     init_weight(model.layers, nn.init.kaiming_normal_,
                 BatchNorm2d, config.bn_eps, config.bn_momentum,
                 mode='fan_in', nonlinearity='relu')
 
     # group weight and config optimizer
     base_lr = config.lr
-    # if engine.distributed:
-    #     base_lr = config.lr * engine.world_size
 
     params_list = []
     params_list = group_weight(params_list, model.conv1,
@@ -78,10 +61,6 @@ with Engine(custom_parser=parser) as engine:
                                BatchNorm2d, base_lr * 10)
 
     optimizer = torch.optim.Adam(params_list)
-    #SGD(params_list,
-     #                           lr=base_lr,
-      #                          momentum=config.momentum,
-       #                         weight_decay=config.weight_decay)
 
     # config lr policy
     total_iteration = config.nepochs * config.niters_per_epoch
@@ -89,9 +68,6 @@ with Engine(custom_parser=parser) as engine:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
-
-    if engine.distributed:
-        model = DistributedDataParallel(model)
 
     engine.register_state(dataloader=train_loader, model=model,
                           optimizer=optimizer)
@@ -101,8 +77,6 @@ with Engine(custom_parser=parser) as engine:
     model.train()
 
     for epoch in range(engine.state.epoch, config.nepochs):
-        if engine.distributed:
-            train_sampler.set_epoch(epoch)
         bar_format = '{desc}[{elapsed}<{remaining},{rate_fmt}]'
         pbar = tqdm(range(config.niters_per_epoch), file=sys.stdout,
                     bar_format=bar_format)
@@ -121,11 +95,7 @@ with Engine(custom_parser=parser) as engine:
 
             loss = model(imgs, gts)
 
-            # reduce the whole loss over multi-gpu
-            if engine.distributed:
-                reduce_loss = all_reduce_tensor(loss,
-                                                world_size=engine.world_size)
-
+            # ld according to epoch and iteration
             current_idx = epoch * config.niters_per_epoch + idx
             lr = lr_policy.get_lr(current_idx)
 
@@ -147,4 +117,3 @@ with Engine(custom_parser=parser) as engine:
         engine.save_and_link_checkpoint(config.snapshot_dir,
                                                 config.log_dir,
                                                 config.log_dir_link)
-            

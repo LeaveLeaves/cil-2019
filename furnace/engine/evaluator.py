@@ -19,7 +19,7 @@ logger = get_logger()
 class Evaluator(object):
     def __init__(self, dataset, class_num, image_mean, image_std, network,
                  multi_scales, is_flip, devices,
-                 verbose=False, save_path=None, show_image=False):
+                 verbose=False, save_path=None):
         self.dataset = dataset
         self.ndata = self.dataset.get_length()
         self.class_num = class_num
@@ -38,42 +38,11 @@ class Evaluator(object):
         self.save_path = save_path
         if save_path is not None:
             ensure_dir(save_path)
-        self.show_image = show_image
 
     def run(self, model_path, model_indice, log_file, log_file_link):
-        """There are four evaluation modes:
-            1.only eval a .pth model: -e *.pth
-            2.only eval a certain epoch: -e epoch
-            3.eval all epochs in a given section: -e start_epoch-end_epoch
-            4.eval all epochs from a certain started epoch: -e start_epoch-
-            """
+        """Evaluate models."""
         if '.pth' in model_indice:
             models = [model_indice, ]
-        elif "-" in model_indice:
-            start_epoch = int(model_indice.split("-")[0])
-            end_epoch = model_indice.split("-")[1]
-
-            models = os.listdir(model_path)
-            models.remove("epoch-last.pth")
-            sorted_models = [None] * len(models)
-            model_idx = [0] * len(models)
-
-            for idx, m in enumerate(models):
-                num = m.split(".")[0].split("-")[1]
-                model_idx[idx] = num
-                sorted_models[idx] = m
-            model_idx = np.array([int(i) for i in model_idx])
-
-            down_bound = model_idx >= start_epoch
-            up_bound = [True] * len(sorted_models)
-            if end_epoch:
-                end_epoch = int(end_epoch)
-                assert start_epoch < end_epoch
-                up_bound = model_idx <= end_epoch
-            bound = up_bound * down_bound
-            model_slice = np.array(sorted_models)[bound]
-            models = [os.path.join(model_path, model) for model in
-                      model_slice]
         else:
             models = [os.path.join(model_path,
                                    'epoch-%s.pth' % model_indice), ]
@@ -162,81 +131,9 @@ class Evaluator(object):
                               (output_size[1], output_size[0]),
                               interpolation=cv2.INTER_LINEAR)
 
-        #print("Pred shape:", pred.shape)
-        #print(pred)
-        pred = pred.argmax(2) # change from 2 to 1
+        pred = pred.argmax(2)
 
         return pred
-
-    # slide the window to evaluate the image
-    def sliding_eval(self, img, crop_size, stride_rate, device=None):
-        ori_rows, ori_cols, c = img.shape
-        processed_pred = np.zeros((ori_rows, ori_cols, self.class_num))
-
-        for s in self.multi_scales:
-            img_scale = cv2.resize(img, None, fx=s, fy=s,
-                                   interpolation=cv2.INTER_LINEAR)
-            new_rows, new_cols, _ = img_scale.shape
-            processed_pred += self.scale_process(img_scale,
-                                                 (ori_rows, ori_cols),
-                                                 crop_size, stride_rate, device)
-
-        pred = processed_pred.argmax(2)
-
-        return pred
-
-    def scale_process(self, img, ori_shape, crop_size, stride_rate,
-                      device=None):
-        new_rows, new_cols, c = img.shape
-        long_size = new_cols if new_cols > new_rows else new_rows
-
-        if long_size <= crop_size:
-            input_data, margin = self.process_image(img, crop_size)
-            score = self.val_func_process(input_data, device)
-            score = score[:, margin[0]:(score.shape[1] - margin[1]),
-                    margin[2]:(score.shape[2] - margin[3])]
-        else:
-            stride = int(np.ceil(crop_size * stride_rate))
-            img_pad, margin = pad_image_to_shape(img, crop_size,
-                                                 cv2.BORDER_CONSTANT, value=0)
-
-            pad_rows = img_pad.shape[0]
-            pad_cols = img_pad.shape[1]
-            r_grid = int(np.ceil((pad_rows - crop_size) / stride)) + 1
-            c_grid = int(np.ceil((pad_cols - crop_size) / stride)) + 1
-            data_scale = torch.zeros(self.class_num, pad_rows, pad_cols).cuda(
-                device)
-            count_scale = torch.zeros(self.class_num, pad_rows, pad_cols).cuda(
-                device)
-
-            for grid_yidx in range(r_grid):
-                for grid_xidx in range(c_grid):
-                    s_x = grid_xidx * stride
-                    s_y = grid_yidx * stride
-                    e_x = min(s_x + crop_size, pad_cols)
-                    e_y = min(s_y + crop_size, pad_rows)
-                    s_x = e_x - crop_size
-                    s_y = e_y - crop_size
-                    img_sub = img_pad[s_y:e_y, s_x: e_x, :]
-                    count_scale[:, s_y: e_y, s_x: e_x] += 1
-
-                    input_data, tmargin = self.process_image(img_sub, crop_size)
-                    temp_score = self.val_func_process(input_data, device)
-                    temp_score = temp_score[:,
-                                 tmargin[0]:(temp_score.shape[1] - tmargin[1]),
-                                 tmargin[2]:(temp_score.shape[2] - tmargin[3])]
-                    data_scale[:, s_y: e_y, s_x: e_x] += temp_score
-            # score = data_scale / count_scale
-            score = data_scale
-            score = score[:, margin[0]:(score.shape[1] - margin[1]),
-                    margin[2]:(score.shape[2] - margin[3])]
-
-        score = score.permute(1, 2, 0)
-        data_output = cv2.resize(score.cpu().numpy(),
-                                 (ori_shape[1], ori_shape[0]),
-                                 interpolation=cv2.INTER_LINEAR)
-
-        return data_output
 
     def val_func_process(self, input_data, device=None):
         input_data = np.ascontiguousarray(input_data[None, :, :, :],
