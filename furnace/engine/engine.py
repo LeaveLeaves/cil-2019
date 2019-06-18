@@ -35,7 +35,7 @@ class State(object):
 
 class Engine(object):
     def __init__(self, custom_parser=None):
-        self.version = 0.0.1
+        self.version = '0.0.1'
         logger.info(
             "PyTorch Version {}, Engine Version {}".format(torch.__version__,
                                                           self.__version__))
