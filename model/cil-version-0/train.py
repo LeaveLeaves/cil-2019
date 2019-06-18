@@ -18,8 +18,6 @@ from utils.init_func import init_weight, group_weight
 from utils.pyt_utils import all_reduce_tensor
 from engine.lr_policy import PolyLR
 from engine.engine import Engine
-from seg_opr.loss_opr import SigmoidFocalLoss, ProbOhemCrossEntropy2d
-
 
 parser = argparse.ArgumentParser()
 

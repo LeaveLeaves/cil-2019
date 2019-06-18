@@ -3,8 +3,9 @@
 # Edit at https://www.gitignore.io/?templates=code,linux,macos,python,windows,jupyternotebook,jupyternotebooks
 
 ### log ###
-#log/*
-#*log/*
+log/
+!log/*/snapshot/epoch-last.pth
+!log/*/snapshot/epoch-0.pth
 
 ### Code ###
 .vscode/*
