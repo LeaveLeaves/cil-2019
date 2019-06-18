@@ -38,7 +38,7 @@ class Engine(object):
         self.version = '0.0.1'
         logger.info(
             "PyTorch Version {}, Engine Version {}".format(torch.__version__,
-                                                          self.__version__))
+                                                          self.version))
         self.state = State()
         self.devices = None
 
