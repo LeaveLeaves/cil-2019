@@ -5,6 +5,8 @@
 # @Contact : changqian_yu@163.com
 # @File    : BaseDataset.py
 
+# adapted from https://github.com/ycszen/TorchSeg/tree/master/furnace/datasets
+
 import os
 import time
 import cv2
@@ -14,10 +16,12 @@ import numpy as np
 import torch.utils.data as data
 
 
-class BaseDataset(data.Dataset):
+class Cil(data.Dataset):
+    trans_labels = [0, 1]
+
     def __init__(self, setting, split_name, preprocess=None,
                  file_length=None):
-        super(BaseDataset, self).__init__()
+        super(Cil, self).__init__()
         self._split_name = split_name
         self._img_path = setting['img_root']
         self._gt_path = setting['gt_root']
@@ -123,17 +127,8 @@ class BaseDataset(data.Dataset):
 
     @classmethod
     def get_class_colors(*args):
-        raise NotImplementedError
+        return [[255, 255, 255], [0, 0, 0]]
 
     @classmethod
     def get_class_names(*args):
-        raise NotImplementedError
-
-
-if __name__ == "__main__":
-    data_setting = {'img_root': '',
-                    'gt_root': '',
-                    'train_source': '',
-                    'eval_source': ''}
-    bd = BaseDataset(data_setting, 'train', None)
-    print(bd.get_class_names())
+        return ['road', 'non-road']
