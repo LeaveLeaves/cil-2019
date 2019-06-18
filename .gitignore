@@ -2,6 +2,10 @@
 # Created by https://www.gitignore.io/api/code,linux,macos,python,windows,jupyternotebook,jupyternotebooks
 # Edit at https://www.gitignore.io/?templates=code,linux,macos,python,windows,jupyternotebook,jupyternotebooks
 
+### log ###
+log/*
+*log/*
+
 ### Code ###
 .vscode/*
 !.vscode/settings.json
