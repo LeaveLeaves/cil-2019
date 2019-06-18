@@ -84,7 +84,6 @@ if __name__ == "__main__":
             segmentor = SegEvaluator(dataset, config.num_classes, config.image_mean,
                                      config.image_std, network,
                                      config.eval_scale_array, config.eval_flip,
-                                     all_dev, args.verbose, args.save_path,
-                                     args.show_image)
+                                     all_dev, args.verbose, args.save_path)
             segmentor.run(config.snapshot_dir, args.epochs, config.val_log_file,
                           config.link_val_log_file)
