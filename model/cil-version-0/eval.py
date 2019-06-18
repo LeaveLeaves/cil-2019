@@ -77,8 +77,6 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--epochs', default='last', type=str)
     parser.add_argument('-d', '--devices', default='1', type=str)
     parser.add_argument('-v', '--verbose', default=False, action='store_true')
-    parser.add_argument('--show_image', '-s', default=False,
-                        action='store_true')
     parser.add_argument('--save_path', '-p', default=None)
     parser.add_argument('--input_size', type=str, default='1x3x400x400',
                         help='Input size. '
@@ -94,7 +92,8 @@ if __name__ == "__main__":
     data_setting = {'img_root': config.img_root_folder,
                     'gt_root': config.gt_root_folder,
                     'train_source': config.train_source,
-                    'eval_source': config.eval_source}
+                    'eval_source': config.eval_source,
+                    'test_source': config.test_source}
     dataset = Cil(data_setting, 'val', None)
 
     if args.speed_test:
@@ -111,7 +110,6 @@ if __name__ == "__main__":
             segmentor = SegEvaluator(dataset, config.num_classes, config.image_mean,
                                      config.image_std, network,
                                      config.eval_scale_array, config.eval_flip,
-                                     all_dev, args.verbose, args.save_path,
-                                     args.show_image)
+                                     all_dev, args.verbose, args.save_path)
             segmentor.run(config.snapshot_dir, args.epochs, config.val_log_file,
                           config.link_val_log_file)
