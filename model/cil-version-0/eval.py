@@ -47,7 +47,9 @@ class SegEvaluator(Evaluator):
             fn = name + '.png'
             cv2.imwrite(os.path.join(self.save_path, fn), pred)
             logger.info('Save the image ' + fn)
-
+        
+        result_dist = {'rmse': 1}
+        
         return results_dict
 
     def compute_metric(self, results):
