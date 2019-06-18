@@ -31,12 +31,12 @@ class SegEvaluator(Evaluator):
         label = data['label']
         name = data['fn']
 
-        #img = cv2.resize(img, (config.image_width, config.image_height),
-        #                 interpolation=cv2.INTER_LINEAR)
-        #label = cv2.resize(label,
-        #                   (config.image_width // config.gt_down_sampling,
-        #                    config.image_height // config.gt_down_sampling),
-        #                   interpolation=cv2.INTER_NEAREST)
+#         img = cv2.resize(img, (config.image_width, config.image_height),
+#                         interpolation=cv2.INTER_LINEAR)
+#         label = cv2.resize(label,
+#                           (config.image_width // config.gt_down_sampling,
+#                            config.image_height // config.gt_down_sampling),
+#                           interpolation=cv2.INTER_NEAREST)
 
         pred = self.whole_eval(img,
                                output_size=(config.image_height,config.image_width),
@@ -47,16 +47,6 @@ class SegEvaluator(Evaluator):
             fn = name + '.png'
             cv2.imwrite(os.path.join(self.save_path, fn), pred)
             logger.info('Save the image ' + fn)
-
-        if self.show_image:
-            colors = self.dataset.get_class_colors
-            image = img
-            clean = np.zeros(label.shape)
-            comp_img = show_img(colors, config.background, image, clean,
-                                label,
-                                pred)
-            cv2.imshow('comp_image', comp_img)
-            cv2.waitKey(0)
 
         return results_dict
 
