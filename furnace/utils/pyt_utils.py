@@ -22,6 +22,13 @@ model_urls = {
 }
 
 
+def all_reduce_tensor(tensor, op=dist.ReduceOp.SUM, world_size=1):
+    tensor = tensor.clone()
+    dist.all_reduce(tensor, op)
+    tensor.div_(world_size)
+
+    return tensor
+
 def load_model(model, model_file, is_restore=False):
     t_start = time.time()
     if isinstance(model_file, str):
