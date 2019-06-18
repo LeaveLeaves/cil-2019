@@ -48,7 +48,9 @@ class SegEvaluator(Evaluator):
             cv2.imwrite(os.path.join(self.save_path, fn), pred)
             logger.info('Save the image ' + fn)
         
-        results_dict = {'rmse': 1}
+        print(label.max(), pred.max())
+        rmse = sqrt(mean_squared_error(label, pred))
+        results_dict = {'rmse': rmse}
         
         return results_dict
 
