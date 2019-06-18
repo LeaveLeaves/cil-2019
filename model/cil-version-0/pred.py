@@ -27,8 +27,8 @@ class SegEvaluator(Evaluator):
         name = data['fn']
 
         pred = self.whole_eval(img,
-                               output_size=(608, 608), 
-                               input_size=(608, 608),
+                               output_size=(config.test_image_height,config.test_image_width), 
+                               input_size=(config.test_image_height,config.test_image_width),
                                device=device)
 
         results_dict = {'rmse': 1}
