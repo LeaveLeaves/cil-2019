@@ -55,7 +55,21 @@ def generate_random_crop_pos(ori_size, crop_size):
 
     return pos_h, pos_w
 
+def pad_image_to_shape(img, shape, border_mode, value):
+    margin = np.zeros(4, np.uint32)
+    shape = get_2dshape(shape)
+    pad_height = shape[0] - img.shape[0] if shape[0] - img.shape[0] > 0 else 0
+    pad_width = shape[1] - img.shape[1] if shape[1] - img.shape[1] > 0 else 0
 
+    margin[0] = pad_height // 2
+    margin[1] = pad_height // 2 + pad_height % 2
+    margin[2] = pad_width // 2
+    margin[3] = pad_width // 2 + pad_width % 2
+
+    img = cv2.copyMakeBorder(img, margin[0], margin[1], margin[2], margin[3],
+                             border_mode, value=value)
+
+    return img, margin
 
 def random_scale(img, gt, scales):
     scale = random.choice(scales)
