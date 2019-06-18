@@ -48,7 +48,7 @@ class SegEvaluator(Evaluator):
             cv2.imwrite(os.path.join(self.save_path, fn), pred)
             logger.info('Save the image ' + fn)
         
-        result_dist = {'rmse': 1}
+        results_dict = {'rmse': 1}
         
         return results_dict
 
