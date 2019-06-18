@@ -4,6 +4,21 @@ import numbers
 import random
 import collections
 
+def get_2dshape(shape, *, zero=True):
+    if not isinstance(shape, collections.Iterable):
+        shape = int(shape)
+        shape = (shape, shape)
+    else:
+        h, w = map(int, shape)
+        shape = (h, w)
+    if zero:
+        minv = 0
+    else:
+        minv = 1
+
+    assert min(shape) >= minv, 'invalid shape: {}'.format(shape)
+    return shape
+
 
 def random_crop_pad_to_shape(img, crop_pos, crop_size, pad_label_value):
     h, w = img.shape[:2]
