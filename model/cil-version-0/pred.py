@@ -30,6 +30,8 @@ class SegEvaluator(Evaluator):
                                output_size=(config.test_image_height,config.test_image_width), 
                                input_size=(config.test_image_height,config.test_image_width),
                                device=device)
+        # binary to greyscale
+        pred *= 237
 
         results_dict = {'rmse': 1}
 
