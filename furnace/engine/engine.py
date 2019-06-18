@@ -67,6 +67,10 @@ class Engine(object):
     def register_state(self, **kwargs):
         self.state.register(**kwargs)
 
+    def update_iteration(self, epoch, iteration):
+        self.state.epoch = epoch
+        self.state.iteration = iteration
+
     def save_checkpoint(self, path):
         """Save model at a checkpoint."""
         logger.info("Saving checkpoint to file {}".format(path))
