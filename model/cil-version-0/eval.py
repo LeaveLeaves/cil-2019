@@ -10,7 +10,7 @@ import torch.multiprocessing as mp
 
 from config import config
 from utils.pyt_utils import ensure_dir, link_file, load_model, parse_devices
-from utils.visualize import print_iou, show_img
+# from utils.visualize import print_iou, show_img
 from engine.evaluator import Evaluator
 from engine.logger import get_logger
 from seg_opr.metric import hist_info, compute_score
