@@ -42,13 +42,14 @@ class SegEvaluator(Evaluator):
                                output_size=(config.image_height,config.image_width),
                                input_size=(config.image_height,config.image_width),
                                device=device)
+        # binary to greyscale
+        pred *= 237
 
         if self.save_path is not None:
             fn = name + '.png'
             cv2.imwrite(os.path.join(self.save_path, fn), pred)
             logger.info('Save the image ' + fn)
         
-        print(label.max(), pred.max())
         rmse = sqrt(mean_squared_error(label, pred))
         results_dict = {'rmse': rmse}
         
