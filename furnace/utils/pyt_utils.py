@@ -22,22 +22,12 @@ model_urls = {
 }
 
 
-def reduce_tensor(tensor, dst=0, op=dist.ReduceOp.SUM, world_size=1):
-    tensor = tensor.clone()
-    dist.reduce(tensor, dst, op)
-    if dist.get_rank() == dst:
-        tensor.div_(world_size)
-
-    return tensor
-
-
 def all_reduce_tensor(tensor, op=dist.ReduceOp.SUM, world_size=1):
     tensor = tensor.clone()
     dist.all_reduce(tensor, op)
     tensor.div_(world_size)
 
     return tensor
-
 
 def load_model(model, model_file, is_restore=False):
     t_start = time.time()
@@ -105,7 +95,6 @@ def parse_devices(input_devices):
 
     return devices
 
-
 def extant_file(x):
     """
     'Type' for argparse - checks that file exists but does not open.
@@ -116,7 +105,6 @@ def extant_file(x):
         raise argparse.ArgumentTypeError("{0} does not exist".format(x))
     return x
 
-
 def link_file(src, target):
     if os.path.isdir(target) or os.path.isfile(target):
         os.remove(target)
@@ -126,8 +114,3 @@ def link_file(src, target):
 def ensure_dir(path):
     if not os.path.isdir(path):
         os.makedirs(path)
-
-
-def _dbg_interactive(var, value):
-    from IPython import embed
-    embed()
