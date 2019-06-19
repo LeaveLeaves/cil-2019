@@ -3,18 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to cil-2109's documentation!
+Computational Intelligence Lab project 2019: road segmentation
 ====================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   ../readme
+   ../README
 
-
-
-Indices and tables
+Indices 
 ==================
 
 * :ref:`genindex`
