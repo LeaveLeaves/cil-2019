@@ -85,7 +85,10 @@ class Cil(data.Dataset):
             files = f.readlines()
 
         for item in files:
-            img_name, gt_name = self._process_item_names(item)
+            item = item.strip()
+            item = item.split('\t')
+            img_name = item[0]
+            gt_name = item[1]
             file_names.append([img_name, gt_name])
 
         return file_names
@@ -101,15 +104,6 @@ class Cil(data.Dataset):
         new_file_names += [self._file_names[i] for i in new_indices]
 
         return new_file_names
-
-    @staticmethod
-    def _process_item_names(item):
-        item = item.strip()
-        item = item.split('\t')
-        img_name = item[0]
-        gt_name = item[1]
-
-        return img_name, gt_name
 
     def get_length(self):
         return self.__len__()
