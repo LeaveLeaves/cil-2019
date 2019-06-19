@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 # encoding: utf-8
-# @Time    : 2017/12/16 下午8:41
-# @Author  : yuchangqian
-# @Contact : changqian_yu@163.com
-# @File    : BaseDataset.py
-
-# adapted from https://github.com/ycszen/TorchSeg/tree/master/furnace/datasets
 
 import os
 import time
