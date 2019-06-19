@@ -46,7 +46,10 @@ class Cil(data.Dataset):
         gt_path = os.path.join(self._gt_path, names[1])
         item_name = names[1].split("/")[-1].split(".")[0]
 
-        img, gt = self._fetch_data(img_path, gt_path)
+#         img, gt = self._fetch_data(img_path, gt_path)
+        img = np.array(cv2.imread(img_path, cv2.IMREAD_COLOR), dtype=None)
+        gt = np.array(cv2.imread(gt_path, cv2.IMREAD_GRAYSCALE), dtype=dtype)
+        
         img = img[:, :, ::-1]
         if self.preprocess is not None:
             img, gt, extra_dict = self.preprocess(img, gt)
@@ -68,12 +71,6 @@ class Cil(data.Dataset):
             output_dict.update(**extra_dict)
 
         return output_dict
-
-    def _fetch_data(self, img_path, gt_path, dtype=None):
-        img = self._open_image(img_path)
-        gt = self._open_image(gt_path, cv2.IMREAD_GRAYSCALE, dtype=dtype)
-
-        return img, gt
 
     def _get_file_names(self, split_name):
         assert split_name in ['train', 'val', 'test']
@@ -116,14 +113,6 @@ class Cil(data.Dataset):
 
     def get_length(self):
         return self.__len__()
-
-    @staticmethod
-    def _open_image(filepath, mode=cv2.IMREAD_COLOR, dtype=None):
-        # cv2: B G R
-        # h w c
-        img = np.array(cv2.imread(filepath, mode), dtype=dtype)
-
-        return img
 
     @classmethod
     def get_class_colors(*args):
