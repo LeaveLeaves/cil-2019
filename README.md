@@ -149,45 +149,44 @@ wget https://storage.googleapis.com/public-wyq/cil-2019/cil-road-segmentation-20
 
 ### Grading
 
-**Project Grading**
 The project grade is composed of a competitive (30%) and a non-competitive (70%) part.
 
-**Competitive grade (30%):** The ranks in the Kaggle competition system will be converted on a linear scale to a grade between 4 and 6.
+#### Competitive grade (30%):
 
-**Non-competitive grade:** The following criteria are graded based on an evaluation by the teaching assistants: quality of paper (30%), creativity of solution (20%), quality of implementation (20%). Each project is graded by two independent reviewers. The grades of each reviewer are de-biased such that the aveage grade across all projects that the reviewer graded is comparable for each reviewer.
+The ranks in the Kaggle competition system will be converted on a linear scale to a grade between 4 and 6.
+
+#### Non-competitive grade (70%):
+
+The following criteria are graded based on an evaluation by the teaching assistants: quality of paper (30%), creativity of solution (20%), quality of implementation (20%). Each project is graded by two independent reviewers. The grades of each reviewer are de-biased such that the aveage grade across all projects that the reviewer graded is comparable for each reviewer.
 
 report grading guidlines
 Your paper will be graded by two independent reviewers according to the following three criteria:
 
 1. Quality of paper (30%)
-----------------
-
-6.0: Good enough for submission to an international conference.
-5.5: Background, method, and experiment are clear. May have minor
-issues in one or two sections. Language is good. Scores and baselines are well documented.
-5.0: Explanation of work is clear, and the reader is able to identify the novelty of the work. Minor issues in one or two sections. Minor problems with language. Has all the recommended sections in the howto-paper.
-4.5: Able to identify contribution. Major problems in presentation of results and or ideas and or reproducibility/baselines.
-4.0: Hard to identify contribution, but still there. One or two good sections should get students a pass.
-3.5: Unable to see novelty. No comparison with any baselines.
-
+    6.0: Good enough for submission to an international conference.
+    5.5: Background, method, and experiment are clear. May have minor
+    issues in one or two sections. Language is good. Scores and baselines are well documented.
+    5.0: Explanation of work is clear, and the reader is able to identify the novelty of the work. Minor issues in one or two sections. Minor problems with language. Has all the recommended sections in the howto-paper.
+    4.5: Able to identify contribution. Major problems in presentation of results and or ideas and or reproducibility/baselines.
+    4.0: Hard to identify contribution, but still there. One or two good sections should get students a pass.
+    3.5: Unable to see novelty. No comparison with any baselines.
 
 2. Creativity of solution (20%)
 
-6.0: Elegant proposal, either making a useful assumption, studying a particular class of data, or using a novel mathematical fact.
-5.5: A non-obvious combination of ideas presented in the course or published in a paper (Depending on the difficulty of that idea).
-5.0: A novel idea or combination not explicitly presented in the course.
-4.5: An idea mentioned in a published paper with small extensions / changes, but not so trivial to implement.
-<=4.0: A trivial idea taken from a published paper.
-
+    6.0: Elegant proposal, either making a useful assumption, studying a particular class of data, or using a novel mathematical fact.
+    5.5: A non-obvious combination of ideas presented in the course or published in a paper (Depending on the difficulty of that idea).
+    5.0: A novel idea or combination not explicitly presented in the course.
+    4.5: An idea mentioned in a published paper with small extensions / changes, but not so trivial to implement.
+    <=4.0: A trivial idea taken from a published paper.
 
 3. Quality of implementation (20%)
 
-6.0: Idea is executed well. The experiments done make sense in order to answer the proposed research questions. There are no obvious experiments not done that could greatly increase clarity. The submitted code and other supplementary material is understandable, commented, complete, clean and there is a README file that explains it and describes how to reproduce your results.
+    6.0: Idea is executed well. The experiments done make sense in order to answer the proposed research questions. There are no obvious experiments not done that could greatly increase clarity. The submitted code and other supplementary material is understandable, commented, complete, clean and there is a README file that explains it and describes how to reproduce your results.
 
-Subtractions from this grade will be made if:
-- the submitted code is unclear, does not run or experiments cannot be reproduced or there is no description of it
-- experiments done are useless to gain understanding or of unclear nature or obviously useful experiments have been left undone
-- comparison to baselines are not done
+    Subtractions from this grade will be made if:
+    - the submitted code is unclear, does not run or experiments cannot be reproduced or there is no description of it
+    - experiments done are useless to gain understanding or of unclear nature or obviously useful experiments have been left undone
+    - comparison to baselines are not done
 
 ### Computational resources
 
