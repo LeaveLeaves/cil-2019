@@ -73,10 +73,9 @@ html_theme = 'classic'
 html_static_path = ['_static']
 
 
-from recommonmark.parser import CommonMarkParser
 
 source_parsers = {
-    '.md': CommonMarkParser,
+   '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
 source_suffix = ['.rst', '.md']
