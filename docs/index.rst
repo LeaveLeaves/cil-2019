@@ -10,7 +10,7 @@ Computational Intelligence Lab project 2019: road segmentation
    :maxdepth: 2
    :caption: Contents:
 
-   ../README.md
+   README.md
 
 Indices 
 ==================
