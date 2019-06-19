@@ -7,6 +7,23 @@ from config import config
 from utils.img_utils import random_scale, random_mirror, normalize, \
     generate_random_crop_pos, random_crop_pad_to_shape
 
+# assign a label to a patch
+def patch_to_label(patch, foreground_threshold=0.25):
+    # percentage of pixels > 1 required to assign a foreground label to a patch
+    df = np.mean(patch)
+    if df > foreground_threshold * 237:
+        return np.ones_like(patch)
+    else:
+        return np.zeros_like(patch)
+
+def img_binary(img, patch_size = 16, foreground_threshold=0.25):
+    for j in range(0, img.shape[1], patch_size):
+        for i in range(0, img.shape[0], patch_size):
+            patch = img[i:i + patch_size, j:j + patch_size]
+            img[i:i + patch_size, j:j + patch_size] = patch_to_label(patch)
+
+    return img
+
 def img_to_black(img):
     # change img to black
     img = img.astype(np.int64)
@@ -24,7 +41,7 @@ class TrainPre(object):
 
     def __call__(self, img, gt):
         img, gt = random_mirror(img, gt)
-        gt = img_to_black(gt)
+        gt = img_binary(gt)
 
         if config.train_scale_array is not None:
             img, gt, scale = random_scale(img, gt, config.train_scale_array)
