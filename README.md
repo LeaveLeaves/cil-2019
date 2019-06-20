@@ -2,7 +2,7 @@
 
 Team Member: Jingyuan Ma, Zhi Ye, Yongqi Wang
 
-This repository contain the tools and models for the the course project of [Computational Intelligence Lab](http://da.inf.ethz.ch/teaching/2019/CIL/project.php) (Spring 2019): Road Segmentaion.
+This repository contains the tools and models for the the course project of [Computational Intelligence Lab](http://da.inf.ethz.ch/teaching/2019/CIL/project.php) (Spring 2019): Road Segmentaion.
 
 ## Prerequisites
 
