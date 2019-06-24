@@ -3,3 +3,4 @@ Try 3 Modifications:
   2. use pretrained model
   3. loss computation on original scale
   4. Refine and upsample using transpose conv
+  5. only do information refinement in last layer, all the rest just concatenate
