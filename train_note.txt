@@ -2,3 +2,4 @@ Try 3 Modifications:
   1. use resnet34
   2. use pretrained model
   3. loss computation on original scale
+  4. Refine and upsample using transpose conv
