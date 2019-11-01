@@ -1,45 +1,157 @@
-# cil-2019
+# Road segmentation
 
-## __DO NOT COMMIT OR PUSH TO DEVELOP/MASTER__
+Team Member: Jingyuan Ma, Zhi Ye, Yongqi Wang
 
-## Master branch
+This repository contains the tools and models for the the course project of [Computational Intelligence Lab](http://da.inf.ethz.ch/teaching/2019/CIL/project.php) (Spring 2019): Road Segmentaion.
 
-`master` branch contains the final version
+## Prerequisites
 
-Do not commit or re-branch until submission
+In our setting, the models are being run inside a [Docker container](https://hub.docker.com/r/ufoym/deepo/) (using the default tag: `latest`)
 
-## Develop branch
+To use the docker container:
 
-
-Make pll request from `feature/wyq` to `develop` branch after testing.
-
-Code should be reviewed before merging into `develop` branch.
-
-Code in develop branch should pass the submission requirements.
-
-## Data
-
-1. `train_pos.txt` and `train_neg.txt`:
-
-    a small set of training tweets for each of the two classes. (Dataset available in the zip file, see link below)
-
-2. `train_pos_full.txt` and `train_neg_full.txt`:
-   
-   a complete set of training tweets for each of the two classes, about 1M tweets per class. (Dataset available in the zip file, see link below)
-
-3. `test_data.txt`:
-
-   the test set, that is the tweets for which you have to predict the sentiment label.
-
-4. `sampleSubmission.csv`:
-
-   a sample submission file in the correct format, note that each test tweet is numbered. (submission of predictions: -1 = negative prediction, 1 = positive prediction)
-
-Note that all tweets have been tokenized already, so that the words and punctuation are properly separated by a whitespace.
-
-### How to download data
-```bash
-wget https://storage.googleapis.com/public-wyq/cil-2019/data.zip
+```shell
+docker pull ufoym/deepo:latest
+# change the volume mount before
+docker run -it --name cu100 -v ./cil-2019:/home/cil-2019 ufoym/deepo bash
+docker ps -a 
+# CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+# ae2f6abc24d5        ufoym/deepo         "bash"              2 hours ago         Up About an hour    6006/tcp            eager_ganguly
+docker ps -a -q
+# ae2f6abc24d5
+# entering the bash with container ID
+docker exec -it cu100 bash
+# follow instructions below
 ```
 
-More details info. on the dataset can be found in the `README.md` under `./data`
+- PyTorch >= 1.0
+  - `pip3 install torch torchvision`
+- Easydict
+  - `pip3 install easydict`
+- tqdm
+  - `pip3 install tqdm`
+
+## Usage
+
+A sample workflow:
+
+```shell
+git clone https://github.com/wyq977/cil-2019.git
+cd cil-2019
+cd model/final
+# train with CUDA device 0
+python train.py -d 0
+# eval using the default last epoh
+python eval.py -d 0 -p ./val_pred
+# generate predicted groundtruth
+python pred.py -d 0 -p ./pred
+# generate submission.csv
+python ../../cil-road-segmentation-2019/mask_to_submission.py --name submission -p ./pred/
+# submit the submission.csv generated
+```
+
+Model dir:
+
+```shell
+├── config.py
+├── dataloader.py
+├── eval.py
+├── network.py
+├── pred.py
+└── train.py
+```
+
+### Prepare data
+
+With a tab-separated files specifying the path of images and groundtruth, `train.txt`, `val.txt`, `test.txt`.
+
+`train.txt` or `val.txt`:
+
+```shell
+path-of-the-image   path-of-the-groundtruth
+```
+
+Noted that in the `test.txt`:
+
+```shell
+path-of-the-image   path-of-the-image
+```
+
+A handy script (`writefile.py`) using the package [glob](https://docs.python.org/3/library/glob.html) can be found inside the dataset directory.
+
+### Training
+
+Currently, distributed training from `torch.distributed.launch` is not supported.
+
+To specify which CUDA device used for training, one can parse the index to `train.py`
+
+A simple use case using the first CUDA device:
+
+```shell
+python train.py -d 0
+```
+
+Training can be restored from saved checkpoints
+
+```shell
+python train.py -d 0 -c log/snapshot/epoch-last.pth
+```
+
+### Predictive groudtruth labels
+
+Similar to training
+
+```shell
+python pred.py -d 0 -p ../../cil-road-segmentation-2019/pred/ -e log/snapshot/epoch-last.pth
+```
+
+### Evalaute
+
+```shell
+python pred.py -d 0 -p ../../cil-road-segmentation-2019/val_pred/ -e log/snapshot/epoch-last.pth
+```
+
+### Create submission.csv
+
+```shell
+cd ../../cil-road-segmentation-2019/
+python mask_to_submission.py --name submission -p pred/
+```
+
+## Structure
+
+```shell
+├── README.md
+├── cil-road-segmentation-2019 # datasets and submission script
+├── docs
+├── utils # helper function and utils for model
+├── log
+└── model
+```
+
+Under `model` directory, one can train, predict groundtruth (test images) and evaluate a model, details usage see the usage section above.
+
+Different helpers functions used in constructing models, training, evaluation and IO operations regarding to `pytorch` could be found under `utils` folder. Functions or modules adapted from [TorchSeg](https://github.com/ycszen/TorchSeg/tree/master/model) is clearly marked and referenced in the files.
+
+## Logistics
+
+### Links:
+
+1. [Projects description](http://da.inf.ethz.ch/teaching/2019/CIL/project.php)
+2. [Road seg](https://inclass.kaggle.com/c/cil-road-segmentation-2019)
+3. [Road seg kaggle sign in](https://www.kaggle.com/t/c83d1c6de17c433ca64b3a9174205c44)
+4. [Link for dataset.zip](https://storage.googleapis.com/public-wyq/cil-2019/cil-road-segmentation-2019.zip)
+5. [Course](http://da.inf.ethz.ch/teaching/2019/CIL/project.php)
+6. [How to write paper](http://da.inf.ethz.ch/teaching/2019/CIL/material/howto-paper.pdf)
+
+### Computational resources
+
+1. https://scicomp.ethz.ch/wiki/Leonhard
+2. https://scicomp.ethz.ch/wiki/CUDA_10_on_Leonhard#Available_frameworks
+3. https://scicomp.ethz.ch/wiki/Using_the_batch_system#GPU
+
+### Project submission
+
+1. Submit the final report: https://cmt3.research.microsoft.com/ETHZCIL2019
+2. Signed form here: http://da.inf.ethz.ch/teaching/2019/CIL/material/Declaration-Originality.pdf
+3. Kaggle: https://inclass.kaggle.com/c/cil-road-segmentation-2019

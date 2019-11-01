@@ -1,0 +1,7 @@
+Try 3 Modifications:
+  1. use resnet34
+  2. use deconvolution instead of interpolation(needs testing)
+  3. OG+random_crop(needs testing, running)
+  4. resnet50 (running)
+  5. resnet101(need further testing)
+  
